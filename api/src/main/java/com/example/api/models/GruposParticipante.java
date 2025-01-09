@@ -1,0 +1,69 @@
+package com.example.api.models;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+
+@Entity
+@Table(name = "grupos_participantes")
+public class GruposParticipante {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "actividades_id", nullable = false)
+    private Actividade actividades;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "grupo_id", nullable = false)
+    private Grupo grupo;
+
+    @ColumnDefault("0")
+    @Column(name = "num_participantes", nullable = false)
+    private Integer numParticipantes;
+
+    @Lob
+    @Column(name = "comentario")
+    private String comentario;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Actividade getActividades() {
+        return actividades;
+    }
+
+    public void setActividades(Actividade actividades) {
+        this.actividades = actividades;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public Integer getNumParticipantes() {
+        return numParticipantes;
+    }
+
+    public void setNumParticipantes(Integer numParticipantes) {
+        this.numParticipantes = numParticipantes;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+
+}
