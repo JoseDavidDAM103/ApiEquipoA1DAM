@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cursos")
-public class Curso {
+public class Curso implements java.io.Serializable {
     @Id
     @Column(name = "id_curso", nullable = false)
     private Integer id;

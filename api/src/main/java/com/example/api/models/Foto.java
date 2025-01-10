@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "fotos")
-public class Foto {
+public class Foto implements java.io.Serializable {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -17,9 +17,9 @@ public class Foto {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "actividad_id", nullable = false)
-    private Actividade actividad;
+    private Actividad actividad;
 
     public Integer getId() {
         return id;
@@ -45,11 +45,11 @@ public class Foto {
         this.descripcion = descripcion;
     }
 
-    public Actividade getActividad() {
+    public Actividad getActividad() {
         return actividad;
     }
 
-    public void setActividad(Actividade actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 

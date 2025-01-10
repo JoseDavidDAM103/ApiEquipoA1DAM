@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "prof_responsables")
-public class ProfResponsable {
+public class ProfResponsable implements java.io.Serializable {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "actividad_id", nullable = false)
-    private Actividade actividad;
+    private Actividad actividad;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "profesor_id", nullable = false)
-    private Profesore profesor;
+    private Profesor profesor;
 
     public Integer getId() {
         return id;
@@ -25,19 +25,19 @@ public class ProfResponsable {
         this.id = id;
     }
 
-    public Actividade getActividad() {
+    public Actividad getActividad() {
         return actividad;
     }
 
-    public void setActividad(Actividade actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 
-    public Profesore getProfesor() {
+    public Profesor getProfesor() {
         return profesor;
     }
 
-    public void setProfesor(Profesore profesor) {
+    public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
     }
 

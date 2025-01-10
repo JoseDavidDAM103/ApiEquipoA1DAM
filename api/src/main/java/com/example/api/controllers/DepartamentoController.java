@@ -1,5 +1,7 @@
 package com.example.api.controllers;
 
+import com.example.api.models.Departamento;
+import com.example.api.repositories.DepartamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,45 +9,45 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/departamentos")
+@RequestMapping("/api/departamento")
 public class DepartamentoController {
 
     @Autowired
-    private DepartamentosRepository departamentosRepository;
+    private DepartamentoRepository DepartamentoRepository;
 
     @GetMapping
-    public List<Departamentos> getAllDepartamentos() {
-        return departamentosRepository.findAll();
+    public List<Departamento> getAllDepartamento() {
+        return DepartamentoRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Departamentos getDepartamentoById(@PathVariable Integer id) {
-        Optional<Departamentos> departamento = departamentosRepository.findById(id);
+    public Departamento getDepartamentoById(@PathVariable Integer id) {
+        Optional<Departamento> departamento = DepartamentoRepository.findById(id);
         return departamento.orElse(null);
     }
 
     @PostMapping
-    public Departamentos createDepartamento(@RequestBody Departamentos nuevoDepartamento) {
-        return departamentosRepository.save(nuevoDepartamento);
+    public Departamento createDepartamento(@RequestBody Departamento nuevoDepartamento) {
+        return DepartamentoRepository.save(nuevoDepartamento);
     }
 
     @PutMapping("/{id}")
-    public Departamentos updateDepartamento(@PathVariable Integer id, @RequestBody Departamentos departamentoActualizado) {
-        return departamentosRepository.findById(id)
+    public Departamento updateDepartamento(@PathVariable Integer id, @RequestBody Departamento departamentoActualizado) {
+        return DepartamentoRepository.findById(id)
                 .map(departamento -> {
                     departamento.setCodigo(departamentoActualizado.getCodigo());
                     departamento.setNombre(departamentoActualizado.getNombre());
-                    return departamentosRepository.save(departamento);
+                    return DepartamentoRepository.save(departamento);
                 })
                 .orElseGet(() -> {
-                    departamentoActualizado.setIdDepar(id);
-                    return departamentosRepository.save(departamentoActualizado);
+                    departamentoActualizado.setId(id);
+                    return DepartamentoRepository.save(departamentoActualizado);
                 });
     }
 
     @DeleteMapping("/{id}")
     public void deleteDepartamento(@PathVariable Integer id) {
-        departamentosRepository.deleteById(id);
+        DepartamentoRepository.deleteById(id);
     }
 }
 

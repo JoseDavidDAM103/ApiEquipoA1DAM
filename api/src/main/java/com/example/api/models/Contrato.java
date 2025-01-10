@@ -6,16 +6,16 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "contratos")
-public class Contrato {
+public class Contrato implements java.io.Serializable {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "actividad_id", nullable = false)
-    private Actividade actividad;
+    private Actividad actividad;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "emp_transporte_id", nullable = false)
     private EmpTransporte empTransporte;
 
@@ -41,11 +41,11 @@ public class Contrato {
         this.id = id;
     }
 
-    public Actividade getActividad() {
+    public Actividad getActividad() {
         return actividad;
     }
 
-    public void setActividad(Actividade actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 

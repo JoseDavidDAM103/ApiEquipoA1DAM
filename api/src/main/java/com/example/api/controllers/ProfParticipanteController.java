@@ -1,5 +1,7 @@
 package com.example.api.controllers;
 
+import com.example.api.models.ProfParticipante;
+import com.example.api.repositories.ProfParticipanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,45 +9,45 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/prof-participantes")
+@RequestMapping("/api/profParticipante")
 public class ProfParticipanteController {
 
     @Autowired
-    private ProfParticipantesRepository profParticipantesRepository;
+    private ProfParticipanteRepository ProfParticipanteRepository;
 
     @GetMapping
-    public List<ProfParticipantes> getAllProfParticipantes() {
-        return profParticipantesRepository.findAll();
+    public List<ProfParticipante> getAllProfParticipante() {
+        return ProfParticipanteRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ProfParticipantes getProfParticipantesById(@PathVariable Integer id) {
-        Optional<ProfParticipantes> pp = profParticipantesRepository.findById(id);
+    public ProfParticipante getProfParticipanteById(@PathVariable Integer id) {
+        Optional<ProfParticipante> pp = ProfParticipanteRepository.findById(id);
         return pp.orElse(null);
     }
 
     @PostMapping
-    public ProfParticipantes createProfParticipantes(@RequestBody ProfParticipantes nuevoPP) {
-        return profParticipantesRepository.save(nuevoPP);
+    public ProfParticipante createProfParticipante(@RequestBody ProfParticipante nuevoPP) {
+        return ProfParticipanteRepository.save(nuevoPP);
     }
 
     @PutMapping("/{id}")
-    public ProfParticipantes updateProfParticipantes(@PathVariable Integer id, @RequestBody ProfParticipantes ppActualizado) {
-        return profParticipantesRepository.findById(id)
+    public ProfParticipante updateProfParticipante(@PathVariable Integer id, @RequestBody ProfParticipante ppActualizado) {
+        return ProfParticipanteRepository.findById(id)
                 .map(pp -> {
-                    pp.setActividadId(ppActualizado.getActividadId());
-                    pp.setProfesorId(ppActualizado.getProfesorId());
-                    return profParticipantesRepository.save(pp);
+                    pp.setActividad(ppActualizado.getActividad());
+                    pp.setProfesor(ppActualizado.getProfesor());
+                    return ProfParticipanteRepository.save(pp);
                 })
                 .orElseGet(() -> {
                     ppActualizado.setId(id);
-                    return profParticipantesRepository.save(ppActualizado);
+                    return ProfParticipanteRepository.save(ppActualizado);
                 });
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProfParticipantes(@PathVariable Integer id) {
-        profParticipantesRepository.deleteById(id);
+    public void deleteProfParticipante(@PathVariable Integer id) {
+        ProfParticipanteRepository.deleteById(id);
     }
 }
 
