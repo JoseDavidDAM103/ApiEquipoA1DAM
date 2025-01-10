@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 @RestController
-    @RequestMapping("/api/Actividad")
+    @RequestMapping("/api/actividad")
     public class ActividadController {
 
         @Autowired
