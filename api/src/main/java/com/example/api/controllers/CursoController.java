@@ -1,5 +1,7 @@
 package com.example.api.controllers;
 
+import com.example.api.models.Curso;
+import com.example.api.repositories.CursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,26 +13,26 @@ import java.util.Optional;
 public class CursoController {
 
     @Autowired
-    private CursosRepository cursosRepository;
+    private CursoRepository cursosRepository;
 
     @GetMapping
-    public List<Cursos> getAllCursos() {
+    public List<Curso> getAllCursos() {
         return cursosRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Cursos getCursoById(@PathVariable Integer id) {
-        Optional<Cursos> curso = cursosRepository.findById(id);
+    public Curso getCursoById(@PathVariable Integer id) {
+        Optional<Curso> curso = cursosRepository.findById(id);
         return curso.orElse(null);
     }
 
     @PostMapping
-    public Cursos createCurso(@RequestBody Cursos nuevoCurso) {
+    public Curso createCurso(@RequestBody Curso nuevoCurso) {
         return cursosRepository.save(nuevoCurso);
     }
 
     @PutMapping("/{id}")
-    public Cursos updateCurso(@PathVariable Integer id, @RequestBody Cursos cursoActualizado) {
+    public Curso updateCurso(@PathVariable Integer id, @RequestBody Curso cursoActualizado) {
         return cursosRepository.findById(id)
                 .map(curso -> {
                     curso.setCodCurso(cursoActualizado.getCodCurso());
@@ -41,7 +43,7 @@ public class CursoController {
                     return cursosRepository.save(curso);
                 })
                 .orElseGet(() -> {
-                    cursoActualizado.setIdCurso(id);
+                    cursoActualizado.setId(id);
                     return cursosRepository.save(cursoActualizado);
                 });
     }

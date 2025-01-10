@@ -5,16 +5,16 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "grupos_participantes")
-public class GruposParticipante {
+public class GruposParticipante implements java.io.Serializable {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "actividades_id", nullable = false)
     private Actividade actividades;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "grupo_id", nullable = false)
     private Grupo grupo;
 
