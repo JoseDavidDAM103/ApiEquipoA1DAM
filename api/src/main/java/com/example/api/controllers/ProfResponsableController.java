@@ -1,5 +1,7 @@
 package com.example.api.controllers;
 
+import com.example.api.models.ProfResponsable;
+import com.example.api.repositories.ProfResponsableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,45 +9,45 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/prof-responsables")
+@RequestMapping("/api/profResponsables")
 public class ProfResponsableController {
 
     @Autowired
-    private ProfResponsablesRepository profResponsablesRepository;
+    private ProfResponsableRepository ProfResponsableRepository;
 
     @GetMapping
-    public List<ProfResponsables> getAllProfResponsables() {
-        return profResponsablesRepository.findAll();
+    public List<ProfResponsable> getAllProfResponsable() {
+        return ProfResponsableRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ProfResponsables getProfResponsableById(@PathVariable Integer id) {
-        Optional<ProfResponsables> pr = profResponsablesRepository.findById(id);
+    public ProfResponsable getProfResponsableById(@PathVariable Integer id) {
+        Optional<ProfResponsable> pr = ProfResponsableRepository.findById(id);
         return pr.orElse(null);
     }
 
     @PostMapping
-    public ProfResponsables createProfResponsable(@RequestBody ProfResponsables nuevoPR) {
-        return profResponsablesRepository.save(nuevoPR);
+    public ProfResponsable createProfResponsable(@RequestBody ProfResponsable nuevoPR) {
+        return ProfResponsableRepository.save(nuevoPR);
     }
 
     @PutMapping("/{id}")
-    public ProfResponsables updateProfResponsable(@PathVariable Integer id, @RequestBody ProfResponsables prActualizado) {
-        return profResponsablesRepository.findById(id)
+    public ProfResponsable updateProfResponsable(@PathVariable Integer id, @RequestBody ProfResponsable prActualizado) {
+        return ProfResponsableRepository.findById(id)
                 .map(pr -> {
-                    pr.setActividadId(prActualizado.getActividadId());
-                    pr.setProfesorId(prActualizado.getProfesorId());
-                    return profResponsablesRepository.save(pr);
+                    pr.setActividad(prActualizado.getActividad());
+                    pr.setProfesor(prActualizado.getProfesor());
+                    return ProfResponsableRepository.save(pr);
                 })
                 .orElseGet(() -> {
                     prActualizado.setId(id);
-                    return profResponsablesRepository.save(prActualizado);
+                    return ProfResponsableRepository.save(prActualizado);
                 });
     }
 
     @DeleteMapping("/{id}")
     public void deleteProfResponsable(@PathVariable Integer id) {
-        profResponsablesRepository.deleteById(id);
+        ProfResponsableRepository.deleteById(id);
     }
 }
 

@@ -1,5 +1,7 @@
 package com.example.api.controllers;
 
+import com.example.api.models.Foto;
+import com.example.api.repositories.FotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,46 +9,46 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/fotos")
+@RequestMapping("/api/Foto")
 public class FotoController {
 
     @Autowired
-    private FotosRepository fotosRepository;
+    private FotoRepository fotoRepository;
 
     @GetMapping
-    public List<Fotos> getAllFotos() {
-        return fotosRepository.findAll();
+    public List<Foto> getAllFoto() {
+        return fotoRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Fotos getFotoById(@PathVariable Integer id) {
-        Optional<Fotos> foto = fotosRepository.findById(id);
+    public Foto getFotoById(@PathVariable Integer id) {
+        Optional<Foto> foto = fotoRepository.findById(id);
         return foto.orElse(null);
     }
 
     @PostMapping
-    public Fotos createFoto(@RequestBody Fotos nuevaFoto) {
-        return fotosRepository.save(nuevaFoto);
+    public Foto createFoto(@RequestBody Foto nuevaFoto) {
+        return fotoRepository.save(nuevaFoto);
     }
 
     @PutMapping("/{id}")
-    public Fotos updateFoto(@PathVariable Integer id, @RequestBody Fotos fotoActualizada) {
-        return fotosRepository.findById(id)
+    public Foto updateFoto(@PathVariable Integer id, @RequestBody Foto fotoActualizada) {
+        return fotoRepository.findById(id)
                 .map(foto -> {
                     foto.setUrlFoto(fotoActualizada.getUrlFoto());
                     foto.setDescripcion(fotoActualizada.getDescripcion());
-                    foto.setActividadId(fotoActualizada.getActividadId());
-                    return fotosRepository.save(foto);
+                    foto.setActividad(fotoActualizada.getActividad());
+                    return fotoRepository.save(foto);
                 })
                 .orElseGet(() -> {
                     fotoActualizada.setId(id);
-                    return fotosRepository.save(fotoActualizada);
+                    return fotoRepository.save(fotoActualizada);
                 });
     }
 
     @DeleteMapping("/{id}")
     public void deleteFoto(@PathVariable Integer id) {
-        fotosRepository.deleteById(id);
+        fotoRepository.deleteById(id);
     }
 }
 

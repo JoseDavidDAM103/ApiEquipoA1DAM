@@ -5,7 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "profesores")
-public class Profesore {
+public class Profesore implements java.io.Serializable {
     @Id
     @Column(name = "uuid", nullable = false, length = 36)
     private String uuid;
@@ -43,7 +43,7 @@ public class Profesore {
     @Column(name = "es_jefe_dep")
     private Byte esJefeDep;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "depart_id", nullable = false)
     private Departamento depart;
 

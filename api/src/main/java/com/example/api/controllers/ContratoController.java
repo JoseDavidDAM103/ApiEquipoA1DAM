@@ -35,8 +35,8 @@ public class ContratoController {
     public Contrato updateContrato(@PathVariable Integer id, @RequestBody Contrato contratoActualizado) {
         return contratoRepository.findById(id)
                 .map(contrato -> {
-                    contrato.setActividadId(contratoActualizado.getActividadId());
-                    contrato.setEmpTransporteId(contratoActualizado.getEmpTransporteId());
+                    contrato.setActividad(contratoActualizado.getActividad());
+                    contrato.setEmpTransporte(contratoActualizado.getEmpTransporte());
                     contrato.setContratada(contratoActualizado.getContratada());
                     contrato.setImporte(contratoActualizado.getImporte());
                     // Continúa con todos los campos

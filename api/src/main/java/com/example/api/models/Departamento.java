@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "departamentos")
-public class Departamento {
+public class Departamento implements java.io.Serializable  {
     @Id
     @Column(name = "id_depar", nullable = false)
     private Integer id;

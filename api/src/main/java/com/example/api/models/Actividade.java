@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "actividades")
-public class Actividade {
+public class Actividade implements java.io.Serializable {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -74,7 +74,7 @@ public class Actividade {
     @Column(name = "url_folleto")
     private String urlFolleto;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "solicitante_id", nullable = false)
     private Profesore solicitante;
 

@@ -1,15 +1,16 @@
 package com.example.api.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "grupos")
-public class Grupo {
+public class Grupo implements java.io.Serializable {
     @Id
     @Column(name = "id_grupo", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
 
@@ -22,7 +23,7 @@ public class Grupo {
     @Column(name = "activo", nullable = false)
     private Byte activo;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "tutor_id", nullable = false)
     private Profesore tutor;
 

@@ -1,5 +1,7 @@
 package com.example.api.controllers;
 
+import com.example.api.models.GruposParticipante;
+import com.example.api.repositories.GruposParticipanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,47 +9,47 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/grupos-participantes")
+@RequestMapping("/api/gruposParticipantes")
 public class GruposParticipanteController {
 
     @Autowired
-    private GruposParticipantesRepository gruposParticipantesRepository;
+    private GruposParticipanteRepository GruposParticipanteRepository;
 
     @GetMapping
-    public List<GruposParticipantes> getAllGruposParticipantes() {
-        return gruposParticipantesRepository.findAll();
+    public List<GruposParticipante> getAllGruposParticipante() {
+        return GruposParticipanteRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public GruposParticipantes getGruposParticipantesById(@PathVariable Integer id) {
-        Optional<GruposParticipantes> gp = gruposParticipantesRepository.findById(id);
+    public GruposParticipante getGruposParticipanteById(@PathVariable Integer id) {
+        Optional<GruposParticipante> gp = GruposParticipanteRepository.findById(id);
         return gp.orElse(null);
     }
 
     @PostMapping
-    public GruposParticipantes createGruposParticipantes(@RequestBody GruposParticipantes nuevoGP) {
-        return gruposParticipantesRepository.save(nuevoGP);
+    public GruposParticipante createGruposParticipante(@RequestBody GruposParticipante nuevoGP) {
+        return GruposParticipanteRepository.save(nuevoGP);
     }
 
     @PutMapping("/{id}")
-    public GruposParticipantes updateGruposParticipantes(@PathVariable Integer id, @RequestBody GruposParticipantes gpActualizado) {
-        return gruposParticipantesRepository.findById(id)
+    public GruposParticipante updateGruposParticipante(@PathVariable Integer id, @RequestBody GruposParticipante gpActualizado) {
+        return GruposParticipanteRepository.findById(id)
                 .map(gp -> {
-                    gp.setActividadesId(gpActualizado.getActividadesId());
-                    gp.setGrupoId(gpActualizado.getGrupoId());
+                    gp.setActividades(gpActualizado.getActividades());
+                    gp.setGrupo(gpActualizado.getGrupo());
                     gp.setNumParticipantes(gpActualizado.getNumParticipantes());
                     gp.setComentario(gpActualizado.getComentario());
-                    return gruposParticipantesRepository.save(gp);
+                    return GruposParticipanteRepository.save(gp);
                 })
                 .orElseGet(() -> {
                     gpActualizado.setId(id);
-                    return gruposParticipantesRepository.save(gpActualizado);
+                    return GruposParticipanteRepository.save(gpActualizado);
                 });
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGruposParticipantes(@PathVariable Integer id) {
-        gruposParticipantesRepository.deleteById(id);
+    public void deleteGruposParticipante(@PathVariable Integer id) {
+        GruposParticipanteRepository.deleteById(id);
     }
 }
 

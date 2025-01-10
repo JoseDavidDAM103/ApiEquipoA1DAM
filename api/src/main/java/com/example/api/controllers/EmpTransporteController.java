@@ -1,5 +1,7 @@
 package com.example.api.controllers;
 
+import com.example.api.models.EmpTransporte;
+import com.example.api.repositories.EmpTransporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/emp-transporte")
+@RequestMapping("/api/empTransporte")
 public class EmpTransporteController {
 
     @Autowired
