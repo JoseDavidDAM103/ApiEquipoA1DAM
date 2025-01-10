@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "actividades")
-public class Actividad {
+public class Actividad implements java.io.Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
