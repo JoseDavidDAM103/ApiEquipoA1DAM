@@ -11,11 +11,11 @@ public class ProfResponsable implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "actividad_id", nullable = false)
-    private Actividade actividad;
+    private Actividad actividad;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "profesor_id", nullable = false)
-    private Profesore profesor;
+    private Profesor profesor;
 
     public Integer getId() {
         return id;
@@ -25,19 +25,19 @@ public class ProfResponsable implements java.io.Serializable {
         this.id = id;
     }
 
-    public Actividade getActividad() {
+    public Actividad getActividad() {
         return actividad;
     }
 
-    public void setActividad(Actividade actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 
-    public Profesore getProfesor() {
+    public Profesor getProfesor() {
         return profesor;
     }
 
-    public void setProfesor(Profesore profesor) {
+    public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
     }
 

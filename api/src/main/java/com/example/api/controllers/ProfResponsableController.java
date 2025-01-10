@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/profResponsables")
+@RequestMapping("/api/profResponsable")
 public class ProfResponsableController {
 
     @Autowired

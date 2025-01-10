@@ -1,7 +1,7 @@
 package com.example.api.controllers;
 
-import com.example.api.models.Profesore;
-import com.example.api.repositories.ProfesoreRepository;
+import com.example.api.models.Profesor;
+import com.example.api.repositories.ProfesorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,37 +9,37 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/Profesore")
-public class ProfesoreController {
+@RequestMapping("/api/profesor")
+public class ProfesorController {
 
     @Autowired
-    private ProfesoreRepository ProfesoreRepository;
+    private ProfesorRepository ProfesorRepository;
 
     @GetMapping
-    public List<Profesore> getAllProfesore() {
-        return ProfesoreRepository.findAll();
+    public List<Profesor> getAllProfesore() {
+        return ProfesorRepository.findAll();
     }
 
     @GetMapping("/{uuid}")
-    public Profesore getProfesorByUuid(@PathVariable String uuid) {
-        Optional<Profesore> profesor = ProfesoreRepository.findById(uuid);
+    public Profesor getProfesorByUuid(@PathVariable String uuid) {
+        Optional<Profesor> profesor = ProfesorRepository.findById(uuid);
         return profesor.orElse(null);
     }
 
     @GetMapping("/dni/{dni}")
-    public Profesore getProfesorByDni(@PathVariable String dni) {
-        Optional<Profesore> profesor = ProfesoreRepository.findProfesoresByDni(dni);
+    public Profesor getProfesorByDni(@PathVariable String dni) {
+        Optional<Profesor> profesor = ProfesorRepository.findProfesoresByDni(dni);
         return profesor.orElse(null);
     }
 
     @PostMapping
-    public Profesore createProfesor(@RequestBody Profesore nuevoProfesor) {
-        return ProfesoreRepository.save(nuevoProfesor);
+    public Profesor createProfesor(@RequestBody Profesor nuevoProfesor) {
+        return ProfesorRepository.save(nuevoProfesor);
     }
 
     @PutMapping("/{uuid}")
-    public Profesore updateProfesor(@PathVariable String uuid, @RequestBody Profesore profesorActualizado) {
-        return ProfesoreRepository.findById(uuid)
+    public Profesor updateProfesor(@PathVariable String uuid, @RequestBody Profesor profesorActualizado) {
+        return ProfesorRepository.findById(uuid)
                 .map(profesor -> {
                     profesor.setDni(profesorActualizado.getDni());
                     profesor.setNombre(profesorActualizado.getNombre());
@@ -51,17 +51,17 @@ public class ProfesoreController {
                     profesor.setActivo(profesorActualizado.getActivo());
                     profesor.setEsJefeDep(profesorActualizado.getEsJefeDep());
                     profesor.setDepart(profesorActualizado.getDepart());
-                    return ProfesoreRepository.save(profesor);
+                    return ProfesorRepository.save(profesor);
                 })
                 .orElseGet(() -> {
                     profesorActualizado.setUuid(uuid);
-                    return ProfesoreRepository.save(profesorActualizado);
+                    return ProfesorRepository.save(profesorActualizado);
                 });
     }
 
     @DeleteMapping("/{uuid}")
     public void deleteProfesor(@PathVariable String uuid) {
-        ProfesoreRepository.deleteById(uuid);
+        ProfesorRepository.deleteById(uuid);
     }
 }
 

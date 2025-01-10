@@ -19,7 +19,7 @@ public class Foto implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "actividad_id", nullable = false)
-    private Actividade actividad;
+    private Actividad actividad;
 
     public Integer getId() {
         return id;
@@ -45,11 +45,11 @@ public class Foto implements java.io.Serializable {
         this.descripcion = descripcion;
     }
 
-    public Actividade getActividad() {
+    public Actividad getActividad() {
         return actividad;
     }
 
-    public void setActividad(Actividade actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 

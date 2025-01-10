@@ -25,7 +25,7 @@ public class Grupo implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "tutor_id", nullable = false)
-    private Profesore tutor;
+    private Profesor tutor;
 
     public Integer getId() {
         return id;
@@ -67,11 +67,11 @@ public class Grupo implements java.io.Serializable {
         this.activo = activo;
     }
 
-    public Profesore getTutor() {
+    public Profesor getTutor() {
         return tutor;
     }
 
-    public void setTutor(Profesore tutor) {
+    public void setTutor(Profesor tutor) {
         this.tutor = tutor;
     }
 

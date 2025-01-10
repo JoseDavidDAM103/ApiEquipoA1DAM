@@ -13,7 +13,7 @@ public class Contrato implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "actividad_id", nullable = false)
-    private Actividade actividad;
+    private Actividad actividad;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "emp_transporte_id", nullable = false)
@@ -41,11 +41,11 @@ public class Contrato implements java.io.Serializable {
         this.id = id;
     }
 
-    public Actividade getActividad() {
+    public Actividad getActividad() {
         return actividad;
     }
 
-    public void setActividad(Actividade actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 
