@@ -55,8 +55,9 @@ public class FileService {
         File directory;
         switch (tipo.toLowerCase()) {
             case "presupuesto" -> {
+                Contrato contrato = contratoRepository.findById(id).orElse(null);
 
-                uploadDirectory = URL_PRESUPUESTO;
+                uploadDirectory = URL_PRESUPUESTO + contrato.getActividad().getTitulo();
 
                 directory = new File(uploadDirectory);
 
@@ -64,7 +65,6 @@ public class FileService {
                     directory.mkdirs();
                 }
 
-                Contrato contrato = contratoRepository.findById(id).orElse(null);
 
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
@@ -186,7 +186,7 @@ public class FileService {
 
             File directory;
 
-            uploadDirectory = URL_FOTOS_PROF;
+            uploadDirectory = URL_FOTOS_PROF+;
 
                     directory = new File(uploadDirectory);
 
