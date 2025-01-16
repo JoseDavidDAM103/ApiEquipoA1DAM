@@ -38,10 +38,10 @@ public class FileService {
     public ProfesorRepository profesorRepository;
     public FotoRepository fotoRepository;
 
-    public final String URL_PRESUPUESTO = "/documentos/presupuestos/";
-    public final String URL_FACTURA = "/documentos/facturas/";
-    public final String URL_FOLLETOS = "/documentos/folletos/";
-    public final String URL_FOTOS = "/imagenes/actividad/fotos/";
+    public final String URL_PRESUPUESTO = "/documents/presupuestos/";
+    public final String URL_FACTURA = "/documents/facturas/";
+    public final String URL_FOLLETOS = "/documents/folletos/";
+    public final String URL_FOTOS = "/imagenes/actividad/";
     public final String URL_FOTOS_PROF = "/imagenes/profesores/";
 
     public ResponseEntity<String> saveArchivo(@RequestParam("id") int id,
@@ -88,8 +88,10 @@ public class FileService {
             }
 
             case "foto" -> {
-
-                uploadDirectory = URL_FOTOS;
+                Foto foto = fotoRepository.findById(id).orElse(null);
+                if (foto != null) {
+                    uploadDirectory = URL_FOTOS+foto.getActividad().getTitulo();
+                }
 
                 directory = new File(uploadDirectory);
 
@@ -97,7 +99,7 @@ public class FileService {
                     directory.mkdirs();
                 }
 
-                Foto foto = fotoRepository.findById(id).orElse(null);
+
 
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
