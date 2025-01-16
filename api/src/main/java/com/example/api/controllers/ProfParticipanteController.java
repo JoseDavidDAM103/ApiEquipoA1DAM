@@ -20,8 +20,8 @@ public class ProfParticipanteController {
         return ProfParticipanteRepository.findAll();
     }
     @GetMapping("/actividad/{id}")
-    public List<ProfParticipante> getAllProfParticipanteByidActividad(@PathVariable Integer idActividad) {
-        return ProfParticipanteRepository.findAllByActividad_Id((idActividad));
+    public List<ProfParticipante> getAllProfParticipanteByidActividad(@PathVariable Integer id) {
+        return ProfParticipanteRepository.findAllByActividad_Id((id));
     }
     @GetMapping("/{id}")
     public ProfParticipante getProfParticipanteById(@PathVariable Integer id) {
