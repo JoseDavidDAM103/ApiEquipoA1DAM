@@ -4,64 +4,64 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    // Bean para encriptar contraseñas con BCrypt
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    // Autenticación manager builder
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http,
-                                                       PasswordEncoder passwordEncoder,
-                                                       UserDetailsServiceImpl userDetailsService) throws Exception {
-        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-
-        return authBuilder.build();
-    }
-
 
     // Configuración principal de seguridad
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/public/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                // En lugar de oauth2.jwt() directo, usamos el Customizer
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                )
+                .build();
+    }
 
-        // 1) Desactivar CSRF en estilo lambda
-        http.csrf(csrf -> csrf.disable());
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        // Define el URI de la JWK Set de Azure
+        String jwkSetUri = "https://login.microsoftonline.com/common/discovery/v2.0/keys";
 
-        // 2) Configuración de autorización usando lambdas
-        http.authorizeHttpRequests(auth -> auth
-                // Permitir sin token el endpoint de login, registro, etc.
-                .requestMatchers("/api/auth/**").permitAll()
-                // Permitir sin token la documentación de Swagger (opcional)
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                // El resto de endpoints requieren autenticación
-                .anyRequest().authenticated()
-        );
+        // Construye el decoder
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
 
-        // 3) Agregar tu filtro JWT antes del UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        // Validador predeterminado que valida exp y nbf
+        OAuth2TokenValidator<Jwt> defaultValidators = JwtValidators.createDefault();
 
-        // 4) Finalmente, construimos el objeto
-        return http.build();
+        // Validador personalizado para omitir la validación de 'iss'
+        OAuth2TokenValidator<Jwt> withoutIssuerValidator = jwt -> OAuth2TokenValidatorResult.success();
+
+        // Combina los validadores usando DelegatingOAuth2TokenValidator
+        OAuth2TokenValidator<Jwt> combinedValidators =
+                new DelegatingOAuth2TokenValidator<>(defaultValidators, withoutIssuerValidator);
+
+        // Establece los validadores combinados
+        jwtDecoder.setJwtValidator(combinedValidators);
+
+        return jwtDecoder;
     }
 
 }
