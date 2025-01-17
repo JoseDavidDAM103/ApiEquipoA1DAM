@@ -191,8 +191,7 @@ public class FileService {
     }
 
 
-    public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id,
-                                                  @RequestParam(value = "tipo", required = false) String tipo) {
+    public Resource getArchivoPDF(@RequestParam("id") int id,@RequestParam(value = "tipo", required = false) String tipo) {
 
         String nombreArchivo = null;
         switch (tipo.toLowerCase()) {
@@ -203,7 +202,6 @@ public class FileService {
                     nombreArchivo = contrato.getUrlFactura();
 
                 } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
                 }
             }
             case "presupuesto" -> {
@@ -211,7 +209,6 @@ public class FileService {
                 if (contrato != null) {
                     nombreArchivo = contrato.getUrlPresupuesto();
                 } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
                 }
             }
             case "folleto" -> {
@@ -219,37 +216,36 @@ public class FileService {
                 if (actividad != null) {
                     nombreArchivo = actividad.getUrlFolleto();
                 } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
                 }
             }
 
         }
         if (nombreArchivo == null || nombreArchivo.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return null;
         }
 
 
         try {
             // Ruta al archivo almacenado
-            Path filePath = Paths.get(tipo.equalsIgnoreCase("folleto") ? URL_FOLLETOS : tipo.equalsIgnoreCase("factura") ? URL_FACTURA : URL_PRESUPUESTO).resolve(nombreArchivo);
+            Path filePath = Paths.get(tipo.equalsIgnoreCase("folleto") ? URL_FOLLETOS+actividadRepository.findById(id) : tipo.equalsIgnoreCase("factura") ? URL_FACTURA+contratoRepository.findById(id).get().getActividad().getTitulo() : URL_PRESUPUESTO+contratoRepository.findById(id).get().getActividad().getTitulo()).resolve(nombreArchivo);
+
             Resource resource = new UrlResource(filePath.toUri());
 
             // Verificar si el archivo existe y es legible
             if (!resource.exists() || !resource.isReadable()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                return null;
             }
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
-
+            return resource;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            System.out.println("Error al bajar el archivo");;
         }
+
+        return null;
     }
 
-    public ResponseEntity<Resource> getArchivoFotoprofesor(@RequestParam("correo") String correo,
-                                                           @RequestParam(value = "tipo", required = false) String tipo) {
+    public Resource getArchivoFotoprofesor(@RequestParam("correo") String correo) {
 
         String nombreArchivo = null;
         Profesor profesor = profesorRepository.findProfesorsByCorreo(correo).orElse(null);
@@ -258,31 +254,27 @@ public class FileService {
             nombreArchivo = profesor.getUrlFoto();
         }
         if (nombreArchivo == null || nombreArchivo.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return null;
         }
 
 
         try {
             // Ruta al archivo almacenado
-            Path filePath = Paths.get(URL_FOTOS_PROF).resolve(nombreArchivo);
+            Path filePath = Paths.get(URL_FOTOS_PROF+correo).resolve(nombreArchivo);
             Resource resource = new UrlResource(filePath.toUri());
 
             // Verificar si el archivo existe y es legible
             if (!resource.exists() || !resource.isReadable()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                return null;
             }
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
+            return resource;
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return null;
         }
     }
 
-    public ResponseEntity<List<Resource>> getArchivoFotosActividad(@RequestParam("id") int id,
-                                                                   @RequestParam(value = "tipo", required = false) String tipo) {
+    public List<Resource> getArchivoFotosActividad(int id) {
         List<Resource> fotos = new ArrayList<>();
         String nombreArchivo = null;
         Actividad actividad = actividadRepository.findById(id).orElse(null);
@@ -292,35 +284,26 @@ public class FileService {
                 nombreArchivo = foto.getUrlFoto();
                 try {
                     // Ruta al archivo almacenado
-                    Path filePath = Paths.get(URL_FOTOS).resolve(nombreArchivo);
+                    Path filePath = Paths.get(URL_FOTOS+actividad.getTitulo()).resolve(nombreArchivo);
                     Resource resource = new UrlResource(filePath.toUri());
 
                     // Verificar si el archivo existe y es legible
                     if (!resource.exists() || !resource.isReadable()) {
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                        return null;
                     }
 
                     fotos.add(resource);
 
                 } catch (Exception e) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                    System.out.println("Error al bajar el fichero");
                 }
 
             }
         }
 
 
-        if (nombreArchivo == null || nombreArchivo.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        String texto = "";
-        for (Resource foto : fotos) {
-            texto += "attachment; filename=\"" + foto.getFilename() + "\"";
-        }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, texto)
-                .body(fotos);
 
+        return fotos;
 
     }
 

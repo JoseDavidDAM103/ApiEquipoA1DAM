@@ -2,7 +2,11 @@ package com.example.api.controllers;
 
 import com.example.api.models.Profesor;
 import com.example.api.repositories.ProfesorRepository;
+import com.example.api.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +18,7 @@ public class ProfesorController {
 
     @Autowired
     private ProfesorRepository ProfesorRepository;
-
+    private FileService fileservice=new FileService();
     @GetMapping
     public List<Profesor> getAllProfesore() {
         return ProfesorRepository.findAll();
@@ -35,6 +39,21 @@ public class ProfesorController {
     @PostMapping
     public Profesor createProfesor(@RequestBody Profesor nuevoProfesor) {
         return ProfesorRepository.save(nuevoProfesor);
+    }
+    @GetMapping("/documentos")
+    public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo){
+        Resource resource=fileservice.getArchivoPDF(id, tipo);
+        if(resource==null){
+            return ResponseEntity.notFound().build();
+        }
+        String texto = "";
+
+        texto += "attachment; filename=\"" + resource.getFilename() + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, texto)
+                .body(resource);
+
     }
 
     @PutMapping("/{uuid}")

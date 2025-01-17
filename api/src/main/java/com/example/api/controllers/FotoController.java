@@ -4,7 +4,9 @@ import com.example.api.models.Actividad;
 import com.example.api.models.Foto;
 import com.example.api.repositories.ActividadRepository;
 import com.example.api.repositories.FotoRepository;
+import com.example.api.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -22,7 +24,7 @@ import java.util.Optional;
 public class FotoController {
 
     public final String URL_FOTOS = "/imagenes/actividad/";
-
+    private FileService fileService=new FileService();
     @Autowired
     private FotoRepository fotoRepository;
 
@@ -63,7 +65,22 @@ public class FotoController {
     public void deleteFoto(@PathVariable Integer id) {
         fotoRepository.deleteById(id);
     }
+    @GetMapping("/poractividad")
+    public ResponseEntity<List<org.springframework.core.io.Resource>> getFotosResources(@RequestParam("id") int id) {
+        List<org.springframework.core.io.Resource> fotos= fileService.getArchivoFotosActividad(id);
+        if (fotos==null){
+            return ResponseEntity.notFound().build();
+        }
+        String texto = "";
+        for (org.springframework.core.io.Resource foto : fotos) {
+            texto += "attachment; filename=\"" + foto.getFilename() + "\"";
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, texto)
+                .body(fotos);
 
+
+    }
     @PostMapping
     public ResponseEntity uploadFiles(@RequestParam("fotos") MultipartFile[] files,
                                       @RequestParam("idActividad") int idActividad,
