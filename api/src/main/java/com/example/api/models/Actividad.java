@@ -10,6 +10,7 @@ import java.time.LocalTime;
 @Table(name = "actividades")
 public class Actividad implements java.io.Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -80,6 +81,12 @@ public class Actividad implements java.io.Serializable {
 
     @Column(name = "importe_por_alumno", precision = 5, scale = 2)
     private BigDecimal importePorAlumno;
+
+    @Column(name = "latitud", nullable = false, precision = 3, scale = 2)
+    private BigDecimal latitud;
+
+    @Column(name = "longitud", nullable = false, precision = 3, scale = 2)
+    private BigDecimal longitud;
 
     public Integer getId() {
         return id;
@@ -239,6 +246,22 @@ public class Actividad implements java.io.Serializable {
 
     public void setImportePorAlumno(BigDecimal importePorAlumno) {
         this.importePorAlumno = importePorAlumno;
+    }
+
+    public BigDecimal getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(BigDecimal latitud) {
+        this.latitud = latitud;
+    }
+
+    public BigDecimal getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(BigDecimal longitud) {
+        this.longitud = longitud;
     }
 
 }

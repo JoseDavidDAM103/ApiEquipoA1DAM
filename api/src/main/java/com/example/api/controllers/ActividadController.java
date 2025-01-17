@@ -19,8 +19,8 @@ import java.util.Optional;
 
 
 @RestController
-    @RequestMapping("/api/Actividad")
-    public class ActividadeController {
+    @RequestMapping("/api/actividad")
+    public class ActividadController {
 
     @Autowired
     private ActividadRepository ActividadRepository;
