@@ -87,36 +87,6 @@ public class FileService {
                 break;
             }
 
-            case "foto" -> {
-                Foto foto = fotoRepository.findById(id).orElse(null);
-                if (foto != null) {
-                    uploadDirectory = URL_FOTOS+foto.getActividad().getTitulo();
-                }
-
-                directory = new File(uploadDirectory);
-
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-
-
-
-                String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
-
-                // Validar si el archivo es una imagen o un PDF
-                boolean esImagen = extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png");
-
-
-                if (esImagen) {
-                    if (foto != null) {
-                        foto.setUrlFoto(nombreArchivo);
-                    }
-
-                    fotoRepository.save(foto);
-
-                    return ResponseEntity.ok("Foto subida correctamente de la actividad: " + foto.getActividad().getTitulo());
-                }
-            }
             case "factura" -> {
                 uploadDirectory = URL_FACTURA;
 
@@ -178,6 +148,7 @@ public class FileService {
         return ResponseEntity.badRequest().body("Error al subir el archivo");
 
     }
+
 
     public ResponseEntity<String> saveFotoProfesor(MultipartFile multipartFile,
                                                    String correo) {
