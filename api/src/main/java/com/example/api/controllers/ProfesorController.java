@@ -40,10 +40,10 @@ public class ProfesorController {
     public Profesor createProfesor(@RequestBody Profesor nuevoProfesor) {
         return ProfesorRepository.save(nuevoProfesor);
     }
-    @GetMapping("/documentos")
-    public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo){
-        Resource resource=fileservice.getArchivoPDF(id, tipo);
-        if(resource==null){
+    @GetMapping("foto")
+    public ResponseEntity<Resource> getFoto(@RequestParam("correo") String correo) {
+        Resource resource=fileservice.getArchivoFotoprofesor(correo);
+        if(resource==null) {
             return ResponseEntity.notFound().build();
         }
         String texto = "";
