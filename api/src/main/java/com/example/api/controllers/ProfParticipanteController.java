@@ -23,6 +23,7 @@ public class ProfParticipanteController {
     public List<ProfParticipante> getAllProfParticipanteByidActividad(@PathVariable Integer id) {
         return ProfParticipanteRepository.findAllByActividad_Id((id));
     }
+
     @GetMapping("/{id}")
     public ProfParticipante getProfParticipanteById(@PathVariable Integer id) {
         Optional<ProfParticipante> pp = ProfParticipanteRepository.findById(id);

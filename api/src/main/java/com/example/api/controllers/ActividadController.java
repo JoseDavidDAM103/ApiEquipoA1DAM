@@ -2,6 +2,11 @@ package com.example.api.controllers;
 
 import com.example.api.models.Actividad;
 import com.example.api.repositories.ActividadRepository;
+import com.example.api.services.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -19,11 +24,12 @@ import java.util.Optional;
 
 
 @RestController
-    @RequestMapping("/api/actividad")
-    public class ActividadController {
+@RequestMapping("/api/actividad")
+public class ActividadController {
 
     @Autowired
     private ActividadRepository ActividadRepository;
+    private FileService fileservice = new FileService();
 
     @GetMapping
     public List<Actividad> getAllActividades() {
@@ -106,8 +112,25 @@ import java.util.Optional;
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
 
+        }
+    }
+      
+    @GetMapping("/documentos")
+    public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo) {
+      
+        Resource resource = fileservice.getArchivoPDF(id, tipo);
+      
+        if (resource == null) {
+            return ResponseEntity.notFound().build();
+        }
+        String texto = "";
+
+        texto += "attachment; filename=\"" + resource.getFilename() + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, texto)
+                .body(resource);
 
     }
 
