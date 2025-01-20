@@ -7,8 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,10 +65,66 @@ public class ActividadController {
                     return ActividadRepository.save(actividadActualizada);
                 });
     }
+          
+   
+        
+    
 
+    @DeleteMapping("/{id}")
+    public void deleteActividad(@PathVariable Integer id) {
+        ActividadRepository.deleteById(id);
+    }
+
+    @GetMapping("/authorization/{id}")
+    public ResponseEntity<InputStreamResource> getExcelAuthorization(@PathVariable Integer id) {
+
+        Optional<Actividad> actividad = ActividadRepository.findById(id);
+
+
+        ClassPathResource plantillaResource = new ClassPathResource("documents/plantilla_autorizacion.xlsx");
+
+        try (
+                InputStream plantillaStream = plantillaResource.getInputStream();
+                Workbook workbook = new XSSFWorkbook(plantillaStream);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream()
+        ) {
+            Sheet sheet = workbook.getSheetAt(0);
+
+            sheet.getRow(5).getCell(4).setCellValue(actividad.get().getTitulo());
+            sheet.getRow(10).getCell(9).setCellValue(actividad.get().getImportePorAlumno().toString());
+            sheet.getRow(13).getCell(9).setCellValue(actividad.get().getFini().toString());
+            sheet.getRow(15).getCell(9).setCellValue(actividad.get().getHini().toString());
+            sheet.getRow(15).getCell(25).setCellValue(actividad.get().getHfin().toString());
+            sheet.getRow(20).getCell(3).setCellValue(actividad.get().getDescripcion());
+            sheet.getRow(27).getCell(3).setCellValue(actividad.get().getComentarios());
+
+            workbook.write(bos);
+
+            ByteArrayInputStream in = new ByteArrayInputStream(bos.toByteArray());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(
+                    ContentDisposition.attachment().filename("authorization.xlsx").build()
+            );
+            headers.setContentType(
+                    MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            );
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(new InputStreamResource(in));
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    
+        }
+      
+      
     @GetMapping("/documentos")
     public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo) {
+      
         Resource resource = fileservice.getArchivoPDF(id, tipo);
+      
         if (resource == null) {
             return ResponseEntity.notFound().build();
         }
@@ -76,6 +142,5 @@ public class ActividadController {
     public void deleteActividad(@PathVariable Integer id) {
         ActividadRepository.deleteById(id);
     }
-
 
 }
