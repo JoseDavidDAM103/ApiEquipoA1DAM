@@ -86,6 +86,12 @@ public class FotoController {
                 Actividad actividad = actividadRepository.findById(idActividad).get();
                 String uploadDir = URL_FOTOS + actividad.getTitulo();
 
+                File directory = new File(uploadDir);
+                if (!directory.exists()) {
+                    System.out.println("Crear Directorio: " + directory.getAbsolutePath());
+                    directory.mkdirs();
+                }
+
                 // Guardar el archivo en la carpeta especificada
                 File dest = new File(uploadDir + File.separator + file.getOriginalFilename());
                 file.transferTo(dest);

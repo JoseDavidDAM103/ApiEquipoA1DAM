@@ -16,7 +16,6 @@ public class ContratoController {
 
     @Autowired
     private ContratoRepository contratoRepository;
-
     FileService fileService;
 
     @GetMapping
@@ -28,12 +27,6 @@ public class ContratoController {
     public Contrato getContratoById(@PathVariable Integer id) {
         Optional<Contrato> contrato = contratoRepository.findById(id);
         return contrato.orElse(null);
-    }
-
-    @PostMapping
-    public Contrato createContrato(@RequestBody Contrato nuevoContrato) {
-        ;
-        return contratoRepository.save(nuevoContrato);
     }
 
     @PostMapping
