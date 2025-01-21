@@ -119,7 +119,8 @@ public class ActividadController {
 
         }
     }
-      
+
+
     @GetMapping("/documentos")
     public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo) {
       
@@ -137,6 +138,4 @@ public class ActividadController {
                 .body(resource);
 
     }
-
-
 }
