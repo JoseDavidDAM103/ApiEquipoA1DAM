@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "fotos")
 public class Foto implements java.io.Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
