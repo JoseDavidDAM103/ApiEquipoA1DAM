@@ -65,10 +65,6 @@ public class ActividadController {
                     return ActividadRepository.save(actividadActualizada);
                 });
     }
-          
-   
-        
-    
 
     @DeleteMapping("/{id}")
     public void deleteActividad(@PathVariable Integer id) {

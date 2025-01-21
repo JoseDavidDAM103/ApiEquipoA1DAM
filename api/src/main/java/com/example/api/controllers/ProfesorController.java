@@ -40,6 +40,7 @@ public class ProfesorController {
     public Profesor createProfesor(@RequestBody Profesor nuevoProfesor) {
         return ProfesorRepository.save(nuevoProfesor);
     }
+
     @GetMapping("foto")
     public ResponseEntity<Resource> getFoto(@RequestParam("correo") String correo) {
         Resource resource=fileservice.getArchivoFotoprofesor(correo);
