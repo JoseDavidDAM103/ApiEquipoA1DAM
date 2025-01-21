@@ -81,7 +81,7 @@ public class FotoController {
 
 
     }
-    @PostMapping
+    @PostMapping("/upload")
     public ResponseEntity uploadFiles(@RequestParam("fotos") MultipartFile[] files,
                                       @RequestParam("idActividad") int idActividad,
                                       @RequestParam("descripcion") String descripcion) {
