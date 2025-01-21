@@ -116,9 +116,9 @@ public class ActividadController {
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    
+
         }
-      
+    }
       
     @GetMapping("/documentos")
     public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo) {
@@ -138,9 +138,5 @@ public class ActividadController {
 
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteActividad(@PathVariable Integer id) {
-        ActividadRepository.deleteById(id);
-    }
 
 }
