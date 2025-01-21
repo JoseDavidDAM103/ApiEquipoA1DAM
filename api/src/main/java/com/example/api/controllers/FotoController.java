@@ -42,11 +42,6 @@ public class FotoController {
         return foto.orElse(null);
     }
 
-    @PostMapping
-    public Foto createFoto(@RequestBody Foto nuevaFoto) {
-        return fotoRepository.save(nuevaFoto);
-    }
-
     @PutMapping("/{id}")
     public Foto updateFoto(@PathVariable Integer id, @RequestBody Foto fotoActualizada) {
         return fotoRepository.findById(id)

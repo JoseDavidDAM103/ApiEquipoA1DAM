@@ -17,6 +17,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
@@ -65,10 +66,21 @@ public class ActividadController {
                     return ActividadRepository.save(actividadActualizada);
                 });
     }
-          
-   
-        
-    
+
+    @PostMapping("/id")
+    public Actividad subirFolleto(@PathVariable Integer id, @RequestBody MultipartFile file) {
+        Actividad actividad = ActividadRepository.findById(id).orElse(null);
+        boolean guardado = false;
+        if (actividad != null && file != null) {
+            guardado = fileservice.saveArchivo(id, file, "folleto");
+        }
+
+        if (guardado) {
+            actividad = ActividadRepository.findById(id).orElse(null);
+            return actividad;
+        }
+        return null;
+    }
 
     @DeleteMapping("/{id}")
     public void deleteActividad(@PathVariable Integer id) {
@@ -116,15 +128,17 @@ public class ActividadController {
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    
+
         }
-      
-      
+    }
+
+
     @GetMapping("/documentos")
-    public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo) {
-      
+    public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id,
+                                                  @RequestParam(value = "tipo", required = false) String tipo) {
+
         Resource resource = fileservice.getArchivoPDF(id, tipo);
-      
+
         if (resource == null) {
             return ResponseEntity.notFound().build();
         }
@@ -137,10 +151,4 @@ public class ActividadController {
                 .body(resource);
 
     }
-
-    @DeleteMapping("/{id}")
-    public void deleteActividad(@PathVariable Integer id) {
-        ActividadRepository.deleteById(id);
-    }
-
 }
