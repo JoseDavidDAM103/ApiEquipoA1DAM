@@ -1,6 +1,5 @@
 package com.example.api.services;
 
-import com.example.api.models.Actividad;
 import com.example.api.models.Contrato;
 import com.example.api.models.Foto;
 import com.example.api.models.Profesor;
@@ -9,26 +8,19 @@ import com.example.api.repositories.ContratoRepository;
 import com.example.api.repositories.FotoRepository;
 import com.example.api.repositories.ProfesorRepository;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.core.ConfigurableObjectInputStream;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 public class FileService {
