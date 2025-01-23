@@ -30,11 +30,11 @@ public class FileService {
     public ProfesorRepository profesorRepository;
     public FotoRepository fotoRepository;
 
-    public final String URL_PRESUPUESTO = "/documents/presupuestos/";
-    public final String URL_FACTURA = "/documents/facturas/";
-    public final String URL_FOLLETOS = "/documents/folletos/";
-    public final String URL_FOTOS = "/imagenes/actividad/";
-    public final String URL_FOTOS_PROF = "/imagenes/profesores/";
+    public final String URL_PRESUPUESTO = "C:/documents/presupuestos/";
+    public final String URL_FACTURA = "C:/documents/facturas/";
+    public final String URL_FOLLETOS = "C:/documents/folletos/";
+    public final String URL_FOTOS = "C:/imagenes/actividad/";
+    public final String URL_FOTOS_PROF = "C:/imagenes/profesores/";
 
     public boolean saveArchivo(int id, MultipartFile multipartFile, String tipo) {
         // Verificación de que el archivo no está vacío
@@ -50,7 +50,7 @@ public class FileService {
             case "presupuesto" -> {
                 Contrato contrato = contratoRepository.findById(id).orElse(null);
 
-                uploadDirectory = URL_PRESUPUESTO + contrato.getActividad().getTitulo();
+                uploadDirectory = "C:\\"+URL_PRESUPUESTO + contrato.getActividad();
 
                 directory = new File(uploadDirectory);
 
@@ -58,86 +58,79 @@ public class FileService {
                     directory.mkdirs();
                 }
 
-
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
                 // Validar si el archivo es una imagen o un PDF
                 boolean esPDF = extension.equals("pdf");
 
-
                 if (esPDF) {
                     if (contrato != null) {
-                        contrato.setUrlPresupuesto(nombreArchivo);
+                        try {
+                            multipartFile.transferTo(directory);
+                            contrato.setUrlPresupuesto(nombreArchivo);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        contratoRepository.save(contrato);
+                        return true;
                     }
-
-                    contratoRepository.save(contrato);
-
-                    return true;
                 }
-                break;
             }
 
             case "factura" -> {
                 Contrato contrato = contratoRepository.findById(id).orElse(null);
-                uploadDirectory = URL_FACTURA+contrato.getActividad().getTitulo();
+                uploadDirectory = "C:\\"+URL_FACTURA+contrato.getActividad();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
 
-
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
                 // Validar si el archivo es una imagen o un PDF
                 boolean esPDF = extension.equals("pdf");
-
 
                 if (esPDF) {
                     if (contrato != null) {
-                        contrato.setUrlFactura(nombreArchivo);
+                        try {
+                            multipartFile.transferTo(directory);
+                            contrato.setUrlFactura(nombreArchivo);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        contratoRepository.save(contrato);
+                        return true;
                     }
-
-                    contratoRepository.save(contrato);
-
-                    return true;
-
                 }
-                break;
             }
-
             case "folleto" -> {
                 Actividad actividad = actividadRepository.findById(id).orElse(null);
-
-                uploadDirectory = URL_FOLLETOS + actividad.getTitulo();
+                uploadDirectory = "C:\\"+URL_FOLLETOS + actividad.getId();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
-
-
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
                 // Validar si el archivo es una imagen o un PDF
                 boolean esPDF = extension.equals("pdf");
-
-
                 if (esPDF) {
                     if (actividad != null) {
-                        actividad.setUrlFolleto(nombreArchivo);
+                        try {
+                            multipartFile.transferTo(directory);
+                            actividad.setUrlFolleto(nombreArchivo);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        actividadRepository.save(actividad);
+                        return true;
                     }
-
-                    actividadRepository.save(actividad);
-
-                    return true;
-
                 }
-                break;
             }
         }
         return false;
-
     }
 
 

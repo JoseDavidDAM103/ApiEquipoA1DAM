@@ -82,7 +82,8 @@ public class FotoController {
         for (MultipartFile file : files) {
             try {
                 Actividad actividad = actividadRepository.findById(idActividad).get();
-                String sanitizedTitle = actividad.getTitulo().replaceAll("\\s+", "_");
+                int sanitizedTitle = actividad.getId();
+                        //.replaceAll("\\s+", "_");
 
                 String path = "C:\\"+ URL_FOTOS+sanitizedTitle+"\\"+file.getOriginalFilename(); // Ruta relativa de recursos
                 File directory = new File(path);
