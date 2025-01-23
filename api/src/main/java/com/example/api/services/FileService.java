@@ -1,5 +1,6 @@
 package com.example.api.services;
 
+import com.example.api.models.Actividad;
 import com.example.api.models.Contrato;
 import com.example.api.models.Foto;
 import com.example.api.models.Profesor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class FileService {
             case "presupuesto" -> {
                 Contrato contrato = contratoRepository.findById(id).orElse(null);
 
-                uploadDirectory = "C:\\"+URL_PRESUPUESTO + contrato.getActividad();
+                uploadDirectory = URL_PRESUPUESTO + contrato.getActividad().getId();
 
                 directory = new File(uploadDirectory);
 
@@ -79,7 +81,7 @@ public class FileService {
 
             case "factura" -> {
                 Contrato contrato = contratoRepository.findById(id).orElse(null);
-                uploadDirectory = "C:\\"+URL_FACTURA+contrato.getActividad();
+                uploadDirectory = URL_FACTURA+contrato.getActividad().getId();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
@@ -106,7 +108,7 @@ public class FileService {
             }
             case "folleto" -> {
                 Actividad actividad = actividadRepository.findById(id).orElse(null);
-                uploadDirectory = "C:\\"+URL_FOLLETOS + actividad.getId();
+                uploadDirectory = URL_FOLLETOS + actividad.getId();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
@@ -212,7 +214,7 @@ public class FileService {
 
         try {
             // Ruta al archivo almacenado
-            Path filePath = Paths.get(tipo.equalsIgnoreCase("folleto") ? URL_FOLLETOS+actividadRepository.findById(id) : tipo.equalsIgnoreCase("factura") ? URL_FACTURA+contratoRepository.findById(id).get().getActividad().getTitulo() : URL_PRESUPUESTO+contratoRepository.findById(id).get().getActividad().getTitulo()).resolve(nombreArchivo);
+            Path filePath = Paths.get(tipo.equalsIgnoreCase("folleto") ? URL_FOLLETOS+actividadRepository.findById(id).get().getId() : tipo.equalsIgnoreCase("factura") ? URL_FACTURA+contratoRepository.findById(id).get().getActividad().getId() : URL_PRESUPUESTO+contratoRepository.findById(id).get().getActividad().getId()).resolve(nombreArchivo);
 
             Resource resource = new UrlResource(filePath.toUri());
 
@@ -268,7 +270,7 @@ public class FileService {
                 nombreArchivo = foto.getUrlFoto();
                 try {
                     // Ruta al archivo almacenado
-                    Path filePath = Paths.get(URL_FOTOS+actividad.getTitulo()).resolve(nombreArchivo);
+                    Path filePath = Paths.get(URL_FOTOS+actividad.getId()).resolve(nombreArchivo);
                     Resource resource = new UrlResource(filePath.toUri());
 
                     // Verificar si el archivo existe y es legible
