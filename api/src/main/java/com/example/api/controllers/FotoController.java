@@ -39,11 +39,6 @@ public class FotoController {
         return foto.orElse(null);
     }
 
-    @PostMapping
-    public Foto createFoto(@RequestBody Foto nuevaFoto) {
-        return fotoRepository.save(nuevaFoto);
-    }
-
     @PutMapping("/{id}")
     public Foto updateFoto(@PathVariable Integer id, @RequestBody Foto fotoActualizada) {
         return fotoRepository.findById(id)
@@ -86,10 +81,18 @@ public class FotoController {
         for (MultipartFile file : files) {
             try {
                 Actividad actividad = actividadRepository.findById(idActividad).get();
-                String uploadDir = URL_FOTOS + actividad.getTitulo();
+                String sanitizedTitle = actividad.getTitulo().replaceAll("\\s+", "_");
+
+                String path = "C:\\"+ URL_FOTOS+sanitizedTitle+"\\"+file.getOriginalFilename(); // Ruta relativa de recursos
+                File directory = new File(path);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                String uploadDir = path;
 
                 // Guardar el archivo en la carpeta especificada
-                File dest = new File(uploadDir + File.separator + file.getOriginalFilename());
+                File dest = new File(uploadDir);
                 file.transferTo(dest);
 
                 Foto foto = new Foto();
@@ -103,7 +106,7 @@ public class FotoController {
 
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Error al subir el archivo: " + file.getOriginalFilename());
+                        .body(e.getMessage());
             }
         }
         return ResponseEntity.ok("Fotos subidas con éxito");

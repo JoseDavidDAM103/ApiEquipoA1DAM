@@ -36,12 +36,10 @@ public class FileService {
     public final String URL_FOTOS = "/imagenes/actividad/";
     public final String URL_FOTOS_PROF = "/imagenes/profesores/";
 
-    public ResponseEntity<String> saveArchivo(@RequestParam("id") int id,
-                                              @RequestParam("fichero") MultipartFile multipartFile,
-                                              @RequestParam("tipo") String tipo) {
+    public boolean saveArchivo(int id, MultipartFile multipartFile, String tipo) {
         // Verificación de que el archivo no está vacío
         if (multipartFile.isEmpty()) {
-            return ResponseEntity.badRequest().body("No se ha seleccionado un archivo.");
+            return false;
         }
 
         String nombreArchivo = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
@@ -74,20 +72,20 @@ public class FileService {
 
                     contratoRepository.save(contrato);
 
-                    return ResponseEntity.ok("Archivo subido correctamente para el presupuesto para el contrato de la actividad " + contrato.getActividad().getTitulo());
+                    return true;
                 }
                 break;
             }
 
             case "factura" -> {
-                uploadDirectory = URL_FACTURA;
+                Contrato contrato = contratoRepository.findById(id).orElse(null);
+                uploadDirectory = URL_FACTURA+contrato.getActividad().getTitulo();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
 
-                Contrato contrato = contratoRepository.findById(id).orElse(null);
 
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
@@ -102,21 +100,22 @@ public class FileService {
 
                     contratoRepository.save(contrato);
 
-                    return ResponseEntity.ok("Archivo subido correctamente la factura para el contrato de la actividad " + contrato.getActividad().getTitulo());
+                    return true;
 
                 }
                 break;
             }
 
             case "folleto" -> {
-                uploadDirectory = URL_FOLLETOS;
+                Actividad actividad = actividadRepository.findById(id).orElse(null);
+
+                uploadDirectory = URL_FOLLETOS + actividad.getTitulo();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
 
-                Actividad actividad = actividadRepository.findById(id).orElse(null);
 
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
@@ -131,13 +130,13 @@ public class FileService {
 
                     actividadRepository.save(actividad);
 
-                    return ResponseEntity.ok("Archivo subido correctamente el folleto para la actividad " + actividad.getTitulo());
+                    return true;
 
                 }
                 break;
             }
         }
-        return ResponseEntity.badRequest().body("Error al subir el archivo");
+        return false;
 
     }
 
