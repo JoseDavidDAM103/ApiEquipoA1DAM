@@ -1,5 +1,6 @@
 package com.example.api.controllers;
 
+
 import com.example.api.models.Actividad;
 import com.example.api.repositories.ActividadRepository;
 import com.example.api.services.FileService;
@@ -7,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
@@ -58,6 +56,17 @@ public class ActividadController {
                     actividad.setFfin(actividadActualizada.getFfin());
                     actividad.setHini(actividadActualizada.getHini());
                     actividad.setHfin(actividadActualizada.getHfin());
+                    actividad.setPrevistaIni(actividadActualizada.getPrevistaIni());
+                    actividad.setTransporteReq(actividadActualizada.getTransporteReq());
+                    actividad.setComentTransporte(actividadActualizada.getComentTransporte());
+                    actividad.setAlojamientoReq(actividadActualizada.getAlojamientoReq());
+                    actividad.setComentAlojamiento(actividadActualizada.getComentAlojamiento());
+                    actividad.setComentarios(actividadActualizada.getComentarios());
+                    actividad.setEstado(actividadActualizada.getEstado());
+                    actividad.setComentEstado(actividadActualizada.getComentEstado());
+                    actividad.setIncidencias(actividadActualizada.getIncidencias());
+                    actividad.setImportePorAlumno(actividadActualizada.getImportePorAlumno());
+
                     return ActividadRepository.save(actividad);
                 })
                 .orElseGet(() -> {

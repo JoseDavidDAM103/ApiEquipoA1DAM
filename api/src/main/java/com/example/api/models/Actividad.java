@@ -1,6 +1,7 @@
 package com.example.api.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -8,16 +9,18 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "actividades")
-public class Actividad implements java.io.Serializable {
+public class Actividad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @NotNull
     @Lob
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
+    @NotNull
     @Lob
     @Column(name = "tipo", nullable = false)
     private String tipo;
@@ -26,21 +29,27 @@ public class Actividad implements java.io.Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @NotNull
     @Column(name = "fini", nullable = false)
     private LocalDate fini;
 
+    @NotNull
     @Column(name = "ffin", nullable = false)
     private LocalDate ffin;
 
+    @NotNull
     @Column(name = "hini", nullable = false)
     private LocalTime hini;
 
+    @NotNull
     @Column(name = "hfin", nullable = false)
     private LocalTime hfin;
 
+    @NotNull
     @Column(name = "prevista_ini", nullable = false)
     private Byte previstaIni;
 
+    @NotNull
     @Column(name = "transporte_req", nullable = false)
     private Byte transporteReq;
 
@@ -48,6 +57,7 @@ public class Actividad implements java.io.Serializable {
     @Column(name = "coment_transporte")
     private String comentTransporte;
 
+    @NotNull
     @Column(name = "alojamiento_req", nullable = false)
     private Byte alojamientoReq;
 
@@ -59,6 +69,7 @@ public class Actividad implements java.io.Serializable {
     @Column(name = "comentarios")
     private String comentarios;
 
+    @NotNull
     @Lob
     @Column(name = "estado", nullable = false)
     private String estado;
@@ -75,18 +86,13 @@ public class Actividad implements java.io.Serializable {
     @Column(name = "url_folleto")
     private String urlFolleto;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "solicitante_id", nullable = false)
     private Profesor solicitante;
 
     @Column(name = "importe_por_alumno", precision = 5, scale = 2)
     private BigDecimal importePorAlumno;
-
-    @Column(name = "latitud", nullable = false, precision = 3, scale = 2)
-    private BigDecimal latitud;
-
-    @Column(name = "longitud", nullable = false, precision = 3, scale = 2)
-    private BigDecimal longitud;
 
     public Integer getId() {
         return id;
@@ -246,22 +252,6 @@ public class Actividad implements java.io.Serializable {
 
     public void setImportePorAlumno(BigDecimal importePorAlumno) {
         this.importePorAlumno = importePorAlumno;
-    }
-
-    public BigDecimal getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(BigDecimal latitud) {
-        this.latitud = latitud;
-    }
-
-    public BigDecimal getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(BigDecimal longitud) {
-        this.longitud = longitud;
     }
 
 }
