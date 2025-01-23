@@ -1,5 +1,6 @@
 package com.example.api.controllers;
 
+import com.example.api.models.Actividad;
 import com.example.api.models.Foto;
 import com.example.api.repositories.ActividadRepository;
 import com.example.api.repositories.FotoRepository;
