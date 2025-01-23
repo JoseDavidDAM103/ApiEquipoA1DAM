@@ -57,6 +57,7 @@ public class FotoController {
     public void deleteFoto(@PathVariable Integer id) {
         fotoRepository.deleteById(id);
     }
+
     @GetMapping("/poractividad")
     public ResponseEntity<List<org.springframework.core.io.Resource>> getFotosResources(@RequestParam("id") int id) {
         List<org.springframework.core.io.Resource> fotos= fileService.getArchivoFotosActividad(id);

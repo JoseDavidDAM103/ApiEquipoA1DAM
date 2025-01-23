@@ -161,7 +161,7 @@ public class FileService {
             directory.mkdirs();
         }
 
-        Profesor profesor = profesorRepository.findProfesorsByCorreo(correo).orElse(null);
+        Profesor profesor = profesorRepository.findProfesorByCorreo(correo).orElse(null);
 
         String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
@@ -239,7 +239,7 @@ public class FileService {
     public Resource getArchivoFotoprofesor(@RequestParam("correo") String correo) {
 
         String nombreArchivo = null;
-        Profesor profesor = profesorRepository.findProfesorsByCorreo(correo).orElse(null);
+        Profesor profesor = profesorRepository.findProfesorByCorreo(correo).orElse(null);
 
         if (profesor != null) {
             nombreArchivo = profesor.getUrlFoto();
