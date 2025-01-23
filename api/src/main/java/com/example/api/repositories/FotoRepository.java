@@ -1,6 +1,5 @@
 package com.example.api.repositories;
 
-import com.example.api.models.Actividad;
 import com.example.api.models.Foto;
 import org.springframework.data.repository.ListCrudRepository;
 

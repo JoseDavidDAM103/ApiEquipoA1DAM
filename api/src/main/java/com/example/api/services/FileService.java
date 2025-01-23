@@ -1,6 +1,5 @@
 package com.example.api.services;
 
-import com.example.api.models.Actividad;
 import com.example.api.models.Contrato;
 import com.example.api.models.Foto;
 import com.example.api.models.Profesor;
@@ -9,26 +8,19 @@ import com.example.api.repositories.ContratoRepository;
 import com.example.api.repositories.FotoRepository;
 import com.example.api.repositories.ProfesorRepository;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.core.ConfigurableObjectInputStream;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 public class FileService {
@@ -44,12 +36,10 @@ public class FileService {
     public final String URL_FOTOS = "/imagenes/actividad/";
     public final String URL_FOTOS_PROF = "/imagenes/profesores/";
 
-    public ResponseEntity<String> saveArchivo(@RequestParam("id") int id,
-                                              @RequestParam("fichero") MultipartFile multipartFile,
-                                              @RequestParam("tipo") String tipo) {
+    public boolean saveArchivo(int id, MultipartFile multipartFile, String tipo) {
         // Verificación de que el archivo no está vacío
         if (multipartFile.isEmpty()) {
-            return ResponseEntity.badRequest().body("No se ha seleccionado un archivo.");
+            return false;
         }
 
         String nombreArchivo = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
@@ -82,20 +72,20 @@ public class FileService {
 
                     contratoRepository.save(contrato);
 
-                    return ResponseEntity.ok("Archivo subido correctamente para el presupuesto para el contrato de la actividad " + contrato.getActividad().getTitulo());
+                    return true;
                 }
                 break;
             }
 
             case "factura" -> {
-                uploadDirectory = URL_FACTURA;
+                Contrato contrato = contratoRepository.findById(id).orElse(null);
+                uploadDirectory = URL_FACTURA+contrato.getActividad().getTitulo();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
 
-                Contrato contrato = contratoRepository.findById(id).orElse(null);
 
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
@@ -110,21 +100,22 @@ public class FileService {
 
                     contratoRepository.save(contrato);
 
-                    return ResponseEntity.ok("Archivo subido correctamente la factura para el contrato de la actividad " + contrato.getActividad().getTitulo());
+                    return true;
 
                 }
                 break;
             }
 
             case "folleto" -> {
-                uploadDirectory = URL_FOLLETOS;
+                Actividad actividad = actividadRepository.findById(id).orElse(null);
+
+                uploadDirectory = URL_FOLLETOS + actividad.getTitulo();
 
                 directory = new File(uploadDirectory);
                 if (!directory.exists()) {
                     directory.mkdirs();
                 }
 
-                Actividad actividad = actividadRepository.findById(id).orElse(null);
 
                 String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
 
@@ -139,13 +130,13 @@ public class FileService {
 
                     actividadRepository.save(actividad);
 
-                    return ResponseEntity.ok("Archivo subido correctamente el folleto para la actividad " + actividad.getTitulo());
+                    return true;
 
                 }
                 break;
             }
         }
-        return ResponseEntity.badRequest().body("Error al subir el archivo");
+        return false;
 
     }
 

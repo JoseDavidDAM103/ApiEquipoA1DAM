@@ -1,6 +1,5 @@
 package com.example.api.controllers;
 
-import com.example.api.models.Actividad;
 import com.example.api.models.Foto;
 import com.example.api.repositories.ActividadRepository;
 import com.example.api.repositories.FotoRepository;
@@ -9,14 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -40,11 +37,6 @@ public class FotoController {
     public Foto getFotoById(@PathVariable Integer id) {
         Optional<Foto> foto = fotoRepository.findById(id);
         return foto.orElse(null);
-    }
-
-    @PostMapping
-    public Foto createFoto(@RequestBody Foto nuevaFoto) {
-        return fotoRepository.save(nuevaFoto);
     }
 
     @PutMapping("/{id}")
@@ -82,7 +74,7 @@ public class FotoController {
 
 
     }
-    @PostMapping
+    @PostMapping("/upload")
     public ResponseEntity uploadFiles(@RequestParam("fotos") MultipartFile[] files,
                                       @RequestParam("idActividad") int idActividad,
                                       @RequestParam("descripcion") String descripcion) {
@@ -90,10 +82,18 @@ public class FotoController {
         for (MultipartFile file : files) {
             try {
                 Actividad actividad = actividadRepository.findById(idActividad).get();
-                String uploadDir = URL_FOTOS + actividad.getTitulo();
+                String sanitizedTitle = actividad.getTitulo().replaceAll("\\s+", "_");
+
+                String path = "C:\\"+ URL_FOTOS+sanitizedTitle+"\\"+file.getOriginalFilename(); // Ruta relativa de recursos
+                File directory = new File(path);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                String uploadDir = path;
 
                 // Guardar el archivo en la carpeta especificada
-                File dest = new File(uploadDir + File.separator + file.getOriginalFilename());
+                File dest = new File(uploadDir);
                 file.transferTo(dest);
 
                 Foto foto = new Foto();
@@ -107,7 +107,7 @@ public class FotoController {
 
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Error al subir el archivo: " + file.getOriginalFilename());
+                        .body(e.getMessage());
             }
         }
         return ResponseEntity.ok("Fotos subidas con éxito");

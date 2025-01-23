@@ -58,6 +58,17 @@ public class ActividadController {
                     actividad.setFfin(actividadActualizada.getFfin());
                     actividad.setHini(actividadActualizada.getHini());
                     actividad.setHfin(actividadActualizada.getHfin());
+                    actividad.setPrevistaIni(actividadActualizada.getPrevistaIni());
+                    actividad.setTransporteReq(actividadActualizada.getTransporteReq());
+                    actividad.setComentTransporte(actividadActualizada.getComentTransporte());
+                    actividad.setAlojamientoReq(actividadActualizada.getAlojamientoReq());
+                    actividad.setComentAlojamiento(actividadActualizada.getComentAlojamiento());
+                    actividad.setComentarios(actividadActualizada.getComentarios());
+                    actividad.setEstado(actividadActualizada.getEstado());
+                    actividad.setComentEstado(actividadActualizada.getComentEstado());
+                    actividad.setIncidencias(actividadActualizada.getIncidencias());
+                    actividad.setImportePorAlumno(actividadActualizada.getImportePorAlumno());
+
                     return ActividadRepository.save(actividad);
                 })
                 .orElseGet(() -> {
@@ -65,6 +76,10 @@ public class ActividadController {
                     return ActividadRepository.save(actividadActualizada);
                 });
     }
+          
+   
+        
+    
 
     @DeleteMapping("/{id}")
     public void deleteActividad(@PathVariable Integer id) {
@@ -115,7 +130,7 @@ public class ActividadController {
 
         }
     }
-      
+
     @GetMapping("/documentos")
     public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo) {
       
@@ -133,5 +148,4 @@ public class ActividadController {
                 .body(resource);
 
     }
-
 }
