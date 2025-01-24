@@ -68,9 +68,15 @@ public class ContratoController {
                     contrato.setImporte(contratoActualizado.getImporte());
                     if(!presupuesto.isEmpty()) {
                         boolean guardado = fileService.saveArchivo(contrato.getId(), presupuesto,"presupuesto");
+                        if(guardado) {
+                            System.out.println("Guardado de presupuesto");
+                        }
                     }
                     if(!factura.isEmpty()) {
                         boolean guardado = fileService.saveArchivo(contrato.getId(), factura,"factura");
+                        if(guardado) {
+                            System.out.println("Guardado de factura");
+                        }
                     }
                     // Continúa con todos los campos
                     return contratoRepository.save(contrato);
