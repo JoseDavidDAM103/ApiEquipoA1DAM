@@ -126,12 +126,43 @@ A continuación, se describe el controlador `AlumnoController`, presentando un r
 
 | **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
 |-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
-| `GET`           | `/actividad`                | Obtiene todas las actividades.                          | Lista de actividades       | `200 OK`             | Ninguno                              |
-| `GET`           | `/actividad/{id}`      | Obtiene una actividad por su id.                        | Detalles del actividad    | `200 OK`             | `id` (string)                       |
-| `POST`          | `/actividad`                | Crea un nuevo actividad.                                | Detalles del alumno creado | `201 Created`       | Cuerpo JSON con los datos del alumno |
-| `PUT`           | `/actividad/{id}`     | Actualiza un actividad existente.                       | Alumno actualizado     | `200 OK`             | `id` (string), Cuerpo JSON con los datos a actualizar |
-| `DELETE`        | `/actividad/{id}`     | Elimina un actividad por su ID. 
+| `GET`           | `/api/actividad`                | Obtiene todas las actividades.                          | Lista de actividades       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/actividad/{id}`      | Obtiene una actividad por su id.                        | Detalles del actividad    | `200 OK`             | `id` (int)                       |
+| `POST`          | `/api/actividad`                | Crea una nueva actividad.                                | Detalles del alumno creado | `201 Created`       | Cuerpo JSON con los datos de la actividad, folleto (MultipartFile) |
+| `PUT`           | `/api/actividad/{id}`     | Actualiza un actividad existente.                       | Alumno actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar, folleto (MultipartFile) |
+| `DELETE`        | `/api/actividad/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
+| `GET`           | `/api/actividad/authorization/{id}` | Crea una autorización con los datos de la actividad | Autorización rellena | `200 OK`    | `id`(int) |
+| `GET`           | `/api/actividad/documentos | Recibe el pdf del folleto | PDF | `200 OK` | `id` (int) | 
 
-    }
-}
-```
+# Endpoints de ContratosController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/contrato`                | Obtiene todos los contratos.                          | Lista de contratos       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/contrato/{id}`      | Obtiene un contrato por su id.                        | Detalles del contrato    | `200 OK`             | `id` (int)                       |
+| `POST`          | `/api/contrato`                | Crea un nuevo contrato.                                | Detalles del contrato creado | `201 Created`       | Cuerpo JSON con los datos del contrato, presupuesto (MultipartFile), factura (MultipartFile) |
+| `PUT`           | `/api/contrato/{id}`     | Actualiza un actividad existente.                       | Contrato actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar, presupuesto (MultipartFile), factura (MultipartFile) |
+| `DELETE`        | `/api/contrato/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
+
+# Endpoints de ProfesorController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/profesor`                | Obtiene todos los contratos.                          | Lista de profesores       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/profesor/{uuid}`      | Obtiene un profesor por su uuid.                        | Detalles del profesor    | `200 OK`             | `uuid` (String)                       |
+| `GET`           | `/api/profesor/dni/{dni}`      | Obtiene un profesor por su dni.                        | Detalles del profesor    | `200 OK`             | `dni` (String)                       |
+| `POST`          | `/api/profesor`                | Crea un nuevo profesor.                                | Detalles del profesor creado | `201 Created`       | Cuerpo JSON con los datos del profesor|
+| `GET`           | `/api/profesor/foto`     | Recoge la foto de un profesor.                       | Foto del profesor     | `200 OK`             | `correo` (String) |
+| `PUT`        | `/api/profesor/{uuid}`     | Modifica un profesor por su uuid. | Detalles del profesor editado | `200 OK` | `uuid` (String), Cuerpo JSON con los datos del profesor |
+| `DELETE`        | `/api/profesor/{uuid}`     | Elimina un profesor por su uuid. | | | `uuid` (String) |
+
+# Endpoints de FotoController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/foto`                | Obtiene todas las fotos.                          | Lista de fotos       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/foto/{id}`      | Obtiene una foto por su id.                        | Detalles de la foto    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/foto/{id}`     | Actualiza una foto existente.                       | Foto actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `GET`           | `/api/foto/poractividad` | Recibe una lista de fotos por el id de la actividad | Lista de fotos de la actividad | `200 OK` | `id` (int) |
+| `DELETE`        | `/api/foto/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
+| `POST`          | `/api/foto/upload` | Sube una lista de fotos. | | `200 OK` | `fotos` MultipartFile[], `idActividad` (int), `descripcion` (String) |
