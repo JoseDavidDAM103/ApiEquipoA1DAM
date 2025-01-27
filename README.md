@@ -156,6 +156,27 @@ A continuación, se describe el controlador `AlumnoController`, presentando un r
 | `PUT`        | `/api/profesor/{uuid}`     | Modifica un profesor por su uuid. | Detalles del profesor editado | `200 OK` | `uuid` (String), Cuerpo JSON con los datos del profesor |
 | `DELETE`        | `/api/profesor/{uuid}`     | Elimina un profesor por su uuid. | | | `uuid` (String) |
 
+# Endpoints de ProfParticipanteController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/profParticipante`                | Obtiene todos los Profesores Participantes.                          | Lista de Profesores Participantes       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/profParticipante/{id}`      | Obtiene un Profesor Participante por su id.                        | Detalles del Profesor Participante    | `200 OK`             | `id` (int)                       |
+| `GET`           | `/api/profParticipante/actividad/{id}`      | Obtiene un Profesor Participante por el id de la actividad.                        | Detalles del Profesor Participante de la actividad    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/profParticipante/{id}`     | Actualiza un Profesor Participante.                       | Profesor Participante actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/profParticipante/{id}`     | Elimina un Profesor Participante por su ID. | | | `id` (int) |
+| `POST`          | `/api/profParticipante` | Sube un Profesor Participante. | | `200 OK` | `id` (int) |
+
+# Endpoints de ProfResponsableController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/profResponsable`                | Obtiene todos los Profesores Responsables.                          | Lista de Profesores Responsables       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/profResponsable/{id}`      | Obtiene un Profesor Responsable por su id.                        | Detalles del Profesor Responsable    | `200 OK`             | `id` (int)                       |                |
+| `PUT`           | `/api/profResponsable/{id}`     | Actualiza un Profesor Responsable.                       | Profesor Responsable actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/profResponsable/{id}`     | Elimina un Profesor Responsable por su ID. | | | `id` (int) |
+| `POST`          | `/api/profResponsable` | Sube un Profesor Responsable. | | `200 OK` | `id` (int) |
+
 # Endpoints de FotoController
 
 | **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
@@ -167,6 +188,75 @@ A continuación, se describe el controlador `AlumnoController`, presentando un r
 | `DELETE`        | `/api/foto/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
 | `POST`          | `/api/foto/upload` | Sube una lista de fotos. | | `200 OK` | `fotos` MultipartFile[], `idActividad` (int), `descripcion` (String) |
 
+# Endpoints de CursoController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/cursos`                | Obtiene todos los cursos.                          | Lista de cursos       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/cursos/{id}`      | Obtiene una curso por su id.                        | Detalles del curso    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/cursos/{id}`     | Actualiza un curso existente.                       | Curso actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/cursos/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
+| `POST`          | `/api/cursos` | Sube un curso. | | `200 OK` | `id` (int) |
+
+# Endpoints de DepartamentoController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/departamento`                | Obtiene todos los departamentos.                          | Lista de departamentos       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/departamento/{id}`      | Obtiene una departamento por su id.                        | Detalles del departamento    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/departamento/{id}`     | Actualiza un departamento existente.                       | Departamento actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/departamento/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
+| `POST`          | `/api/departamento` | Sube un departamento. | | `200 OK` | `id` (int) |
+
+# Endpoints de DepartamentoController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/departamento`                | Obtiene todos los departamentos.                          | Lista de departamentos       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/departamento/{id}`      | Obtiene una departamento por su id.                        | Detalles del departamento    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/departamento/{id}`     | Actualiza un departamento existente.                       | Departamento actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/departamento/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
+| `POST`          | `/api/departamento` | Sube un departamento. | | `200 OK` | `id` (int) |
+
+# Endpoints de EmpTransporteController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/empTransporte`                | Obtiene todas las empresas de transporte.                          | Lista de las empresas de transporte       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/empTransporte/{id}`      | Obtiene una empresa de transporte por su id.                        | Detalles del departamento    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/empTransporte/{id}`     | Actualiza un empresa de transporte existente.                       | Empresa de Transporte actualizada     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/empTransporte/{id}`     | Elimina una empresa de transporte por su ID. | | | `id` (int) |
+| `POST`          | `/api/empTransporte` | Sube una empresa de transporte. | | `200 OK` | `id` (int) |
+
+# Endpoints de GrupoController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/grupo`                | Obtiene todos los grupos.                          | Lista de grupos       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/grupo/{id}`      | Obtiene un grupo por su id.                        | Detalles del grupo    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/grupo/{id}`     | Actualiza un grupo.                       | Grupo actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/grupo/{id}`     | Elimina un grupo por su ID. | | | `id` (int) |
+| `POST`          | `/api/grupo` | Sube un grupo. | | `200 OK` | `id` (int) |
+
+# Endpoints de GrupoParticipanteController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/grupoParticipante`                | Obtiene todos los grupoParticipantes.                          | Lista de grupos       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/grupoParticipante/{id}`      | Obtiene un grupoParticipante por su id.                        | Detalles del grupoParticipante    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/grupo/{id}`     | Actualiza un grupoParticipante.                       | grupoParticipantes actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/grupoParticipantes/{id}`     | Elimina un grupoParticipantes por su ID. | | | `id` (int) |
+| `POST`          | `/api/grupoParticipantes` | Sube un grupoParticipantes. | | `200 OK` | `id` (int) |
+
+# Endpoints de LocalizacionController
+
+| **Método HTTP** | **Endpoint**              | **Descripción**                                      | **Respuesta Exitosa** | **Código de Estado** | **Parámetros**                       |
+|-----------------|---------------------------|------------------------------------------------------|-----------------------|----------------------|--------------------------------------|
+| `GET`           | `/api/localizacion`                | Obtiene todas las localizaciones.                          | Lista de localizaciones       | `200 OK`             | Ninguno                              |
+| `GET`           | `/api/localizacion/{id}`      | Obtiene un localización por su id.                        | Detalles del localización    | `200 OK`             | `id` (int)                       |
+| `PUT`           | `/api/localizacion/{id}`     | Actualiza una localización.                       | Localización actualizado     | `200 OK`             | `id` (int), Cuerpo JSON con los datos a actualizar |
+| `DELETE`        | `/api/localizacion/{id}`     | Elimina un localización por su ID. | | | `id` (int) |
+| `POST`          | `/api/localizacion` | Sube un localización. | | `200 OK` | `id` (int) |
 
 
 # Seguridad
