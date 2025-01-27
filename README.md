@@ -166,3 +166,57 @@ A continuación, se describe el controlador `AlumnoController`, presentando un r
 | `GET`           | `/api/foto/poractividad` | Recibe una lista de fotos por el id de la actividad | Lista de fotos de la actividad | `200 OK` | `id` (int) |
 | `DELETE`        | `/api/foto/{id}`     | Elimina un actividad por su ID. | | | `id` (int) |
 | `POST`          | `/api/foto/upload` | Sube una lista de fotos. | | `200 OK` | `fotos` MultipartFile[], `idActividad` (int), `descripcion` (String) |
+
+
+
+# Seguridad
+Con la finalidad de obtener un nivel de seguridad muy alto sin gastar un tiempo excesivo implementándola, nos hemos decantado por aprovecharnos de la seguridad de Microsoft, usando las cuentas del mismo y los tokens que el propio Microsoft gestiona para dar acceso o no a la api. Para ello, hemos tenido que conectar la api a Azure y añadirla a las aplicaciones gestionadas por el mismo para que se le proporcione acceso a los servidores de validación de tokens.
+
+Las rutas que NO estan protegidas por la seguridad para una futura implementación de endpoints publicos son:
+- /public/**
+- /swagger-ui/**
+- /v3/**
+  
+## Gestión de los tokens
+```java
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                // En lugar de oauth2.jwt() directo, usamos el Customizer
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                )
+                .build();
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        // Define el URI de la JWK Set de Azure
+        String jwkSetUri = "https://login.microsoftonline.com/common/discovery/v2.0/keys";
+
+        // Construye el decoder
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+
+        // Validador predeterminado que valida exp y nbf
+        OAuth2TokenValidator<Jwt> defaultValidators = JwtValidators.createDefault();
+
+        // Validador personalizado para omitir la validación de 'iss'
+        OAuth2TokenValidator<Jwt> withoutIssuerValidator = jwt -> OAuth2TokenValidatorResult.success();
+
+        // Combina los validadores usando DelegatingOAuth2TokenValidator
+        OAuth2TokenValidator<Jwt> combinedValidators =
+                new DelegatingOAuth2TokenValidator<>(defaultValidators, withoutIssuerValidator);
+
+        // Establece los validadores combinados
+        jwtDecoder.setJwtValidator(combinedValidators);
+
+        return jwtDecoder;
+    }
+```
+  
