@@ -1,6 +1,7 @@
 package com.example.api.controllers;
 
 import com.example.api.models.Actividad;
+import com.example.api.models.Contrato;
 import com.example.api.repositories.ActividadRepository;
 import com.example.api.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
@@ -29,7 +31,7 @@ public class ActividadController {
 
     @Autowired
     private ActividadRepository ActividadRepository;
-    private FileService fileservice = new FileService();
+    private FileService fileService = new FileService();
 
     @GetMapping
     public List<Actividad> getAllActividades() {
@@ -43,12 +45,22 @@ public class ActividadController {
     }
 
     @PostMapping
-    public Actividad createActividad(@RequestBody Actividad nuevaActividad) {
-        return ActividadRepository.save(nuevaActividad);
+    public Actividad createActividad(@RequestBody Actividad nuevaActividad, @RequestBody MultipartFile folleto ) {
+        boolean guardado = false;
+        Actividad actividad = ActividadRepository.save(nuevaActividad);
+
+        if (actividad != null) {
+            if (folleto.isEmpty()) {
+                guardado = true;
+            } else {
+                guardado = fileService.saveArchivo(actividad.getId(), folleto, "folleto");
+            }
+        }
+        return actividad;
     }
 
     @PutMapping("/{id}")
-    public Actividad updateActividad(@PathVariable Integer id, @RequestBody Actividad actividadActualizada) {
+    public Actividad updateActividad(@PathVariable Integer id, @RequestBody Actividad actividadActualizada, @RequestBody MultipartFile folleto) {
         return ActividadRepository.findById(id)
                 .map(actividad -> {
                     actividad.setTitulo(actividadActualizada.getTitulo());
@@ -69,6 +81,12 @@ public class ActividadController {
                     actividad.setIncidencias(actividadActualizada.getIncidencias());
                     actividad.setImportePorAlumno(actividadActualizada.getImportePorAlumno());
 
+                    if (folleto != null) {
+                        boolean guardado = fileService.saveArchivo(id, folleto, "folleto");
+                        if (guardado) {
+                            System.out.println("Folleto guardado");
+                        }
+                    }
                     return ActividadRepository.save(actividad);
                 })
                 .orElseGet(() -> {
@@ -76,10 +94,6 @@ public class ActividadController {
                     return ActividadRepository.save(actividadActualizada);
                 });
     }
-          
-   
-        
-    
 
     @DeleteMapping("/{id}")
     public void deleteActividad(@PathVariable Integer id) {
@@ -133,9 +147,9 @@ public class ActividadController {
 
     @GetMapping("/documentos")
     public ResponseEntity<Resource> getArchivoPDF(@RequestParam("id") int id, @RequestParam(value = "tipo", required = false) String tipo) {
-      
-        Resource resource = fileservice.getArchivoPDF(id, tipo);
-      
+
+        Resource resource = fileService.getArchivoPDF(id, tipo);
+
         if (resource == null) {
             return ResponseEntity.notFound().build();
         }

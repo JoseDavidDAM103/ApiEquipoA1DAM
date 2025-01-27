@@ -53,7 +53,7 @@ public class ContratoController {
         return contrato;
         }
 
-        contratoRepository.delete(contrato);
+        contratoRepository.save(contrato);
         return null;
     }
 
