@@ -36,7 +36,7 @@ control de presupuestos, transportes, dias, profesores organizadores y facilitar
 
 ---
 
-## Application.properties
+## Configuración
 
 ```properties
 # Configuración del servidor
@@ -118,7 +118,7 @@ Los repositorios en esta API representan la capa de acceso a datos.
 - `findProfesoresByDni(String dni)`: Obtiene profesor por su dni.
 - `findProfesorsByCorreo(String correo);`: Busca un profesor por su correo.
 
-# Controladores
+# Controladores (EndPoints)
 
 A continuación, se describe el controlador `AlumnoController`, presentando un resumen  de todos los endpoints disponibles en este controlador.
 
