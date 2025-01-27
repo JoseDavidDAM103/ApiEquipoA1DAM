@@ -12,7 +12,7 @@
 2. [Configuración](#configuración)
 3. [Tecnologías Utilizadas](#tecnologías-utilizadas)  
 4. [Estructura](#estructura)
-5. [Modelos](#modelos-entities)
+5. [Modelos](#modelos)
 6. [Repositorios (Repositories)](#repositorios-repositories)
 7. [Controladores (EndPoints)](#controladores-endpoints)
 8. [Seguridad](#seguridad)
