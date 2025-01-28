@@ -38,6 +38,9 @@ public class ProfesorController {
 
     @PostMapping
     public Profesor createProfesor(@RequestBody Profesor nuevoProfesor) {
+        if(nuevoProfesor.getUuid()==null){
+          nuevoProfesor.setUuid(java.util.UUID.randomUUID().toString());
+        }
         return ProfesorRepository.save(nuevoProfesor);
     }
     @GetMapping("foto")
