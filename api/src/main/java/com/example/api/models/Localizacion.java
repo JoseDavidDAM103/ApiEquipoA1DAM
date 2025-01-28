@@ -13,7 +13,7 @@ public class Localizacion {
     private Integer id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_Actividad", nullable = false)
     private Actividad idActividad;
 
