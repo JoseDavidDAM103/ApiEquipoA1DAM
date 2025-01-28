@@ -4,6 +4,7 @@ import com.example.api.models.Actividad;
 import com.example.api.models.Contrato;
 import com.example.api.repositories.ActividadRepository;
 import com.example.api.services.FileService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,11 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -32,6 +35,8 @@ public class ActividadController {
     @Autowired
     private ActividadRepository ActividadRepository;
     private FileService fileService = new FileService();
+    @Autowired
+    private ActividadRepository actividadRepository;
 
     @GetMapping
     public List<Actividad> getAllActividades() {
@@ -53,7 +58,35 @@ public class ActividadController {
             if (folleto.isEmpty()) {
                 guardado = true;
             } else {
-                guardado = fileService.saveArchivo(actividad.getId(), folleto, "folleto");
+
+                    String nombreArchivo = StringUtils.cleanPath(Objects.requireNonNull(folleto.getOriginalFilename()));
+                    String uploadDirectory = "C:\\documents\\facturas\\" + actividad.getId();
+
+                    File directory = new File(uploadDirectory);
+                    if (!directory.exists()) {
+                        File parentDirectory = directory.getParentFile();
+                        if (!parentDirectory.exists()) {
+                            parentDirectory.mkdirs();
+                            directory.mkdirs();
+                        }
+                    }
+                    String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
+
+                    // Validar si el archivo es una imagen o un PDF
+                    boolean esPDF = extension.equals("pdf");
+                    if (esPDF) {
+                        if (actividad != null) {
+                            try {
+                                folleto.transferTo(directory);
+                                actividad.setUrlFolleto(nombreArchivo);
+                                System.out.println("Folleto guardado");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            return actividadRepository.save(actividad);
+                        }
+                    }
             }
         }
         return actividad;
@@ -82,9 +115,34 @@ public class ActividadController {
                     actividad.setImportePorAlumno(actividadActualizada.getImportePorAlumno());
 
                     if (folleto != null) {
-                        boolean guardado = fileService.saveArchivo(id, folleto, "folleto");
-                        if (guardado) {
-                            System.out.println("Folleto guardado");
+
+                        String nombreArchivo = StringUtils.cleanPath(Objects.requireNonNull(folleto.getOriginalFilename()));
+                        String uploadDirectory = "C:\\documents\\facturas\\" + actividad.getId();
+
+                        File directory = new File(uploadDirectory);
+                        if (!directory.exists()) {
+                            File parentDirectory = directory.getParentFile();
+                            if (!parentDirectory.exists()) {
+                                parentDirectory.mkdirs();
+                                directory.mkdirs();
+                            }
+                        }
+                        String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
+
+                        // Validar si el archivo es una imagen o un PDF
+                        boolean esPDF = extension.equals("pdf");
+                        if (esPDF) {
+                            if (actividad != null) {
+                                try {
+                                    folleto.transferTo(directory);
+                                    actividad.setUrlFolleto(nombreArchivo);
+                                    System.out.println("Folleto guardado");
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                                return actividadRepository.save(actividad);
+                            }
                         }
                     }
                     return ActividadRepository.save(actividad);

@@ -99,7 +99,7 @@ public class FotoController {
                 file.transferTo(dest);
 
                 Foto foto = new Foto();
-                foto.setUrlFoto(uploadDir + File.separator + file.getOriginalFilename());
+                foto.setUrlFoto(uploadDir);
 
                 if(descripcion != null) {foto.setDescripcion(descripcion);}
                 else {foto.setDescripcion(actividad.getTitulo());}

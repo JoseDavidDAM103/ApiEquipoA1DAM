@@ -3,11 +3,16 @@ package com.example.api.controllers;
 import com.example.api.models.Contrato;
 import com.example.api.repositories.ContratoRepository;
 import com.example.api.services.FileService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -40,12 +45,67 @@ public class ContratoController {
             if(presupuesto.isEmpty()) {
                 guardado = true;
             } else {
-                guardado = fileService.saveArchivo(contrato.getId(), presupuesto,"presupuesto");
+
+                String nombreArchivo = StringUtils.cleanPath(Objects.requireNonNull(presupuesto.getOriginalFilename()));
+                String uploadDirectory = "C:/documents/presupuestos/" + contrato.getActividad().getId();
+
+                File directory = new File(uploadDirectory);
+                if (!directory.exists()) {
+                    File parentDirectory = directory.getParentFile();
+                    if (!parentDirectory.exists()) {
+                        parentDirectory.mkdirs();
+                        directory.mkdirs();
+                    }
+                }
+                String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
+
+                // Validar si el archivo es una imagen o un PDF
+                boolean esPDF = extension.equals("pdf");
+                if (esPDF) {
+                    if (contrato != null) {
+                        try {
+                            presupuesto.transferTo(directory);
+                            contrato.setUrlPresupuesto(nombreArchivo);
+                            System.out.println("Presupuesto guardado");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        return contratoRepository.save(contrato);
+                    }
+                }
             }
             if(factura.isEmpty()) {
                 guardado = true;
             }else {
-                guardado = fileService.saveArchivo(contrato.getId(), factura,"factura");
+                String nombreArchivo = StringUtils.cleanPath(Objects.requireNonNull(presupuesto.getOriginalFilename()));
+                String uploadDirectory = "C:/documents/facturas/" + contrato.getActividad().getId();
+
+                File directory = new File(uploadDirectory);
+                if (!directory.exists()) {
+                    File parentDirectory = directory.getParentFile();
+                    if (!parentDirectory.exists()) {
+                        parentDirectory.mkdirs();
+                        directory.mkdirs();
+                    }
+                }
+                String extension = FilenameUtils.getExtension(nombreArchivo).toLowerCase();
+
+                // Validar si el archivo es una imagen o un PDF
+                boolean esPDF = extension.equals("pdf");
+                if (esPDF) {
+                    if (contrato != null) {
+                        try {
+                            presupuesto.transferTo(directory);
+                            contrato.setUrlFactura(nombreArchivo);
+                            System.out.println("Factura guardada");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        return contratoRepository.save(contrato);
+                    }
+                }
             }
         }
         if(guardado) {
